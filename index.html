@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Faceless Video System</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
+:root {
+–bg: #0a0a0a;
+–surface: #111111;
+–border: #1e1e1e;
+–accent: #e8ff47;
+–accent2: #ff6b35;
+–text: #e8e8e0;
+–muted: #666660;
+–step-bg: #141414;
+}
+
+- { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+background: var(–bg);
+color: var(–text);
+font-family: ‘DM Sans’, sans-serif;
+font-weight: 300;
+line-height: 1.7;
+min-height: 100vh;
+}
+
+/* HEADER */
+header {
+border-bottom: 1px solid var(–border);
+padding: 3rem 4rem 2.5rem;
+position: relative;
+overflow: hidden;
+}
+header::before {
+content: ‘’;
+position: absolute;
+top: -60px; left: -60px;
+width: 340px; height: 340px;
+background: radial-gradient(circle, rgba(232,255,71,0.07) 0%, transparent 70%);
+pointer-events: none;
+}
+.tag {
+font-family: ‘DM Mono’, monospace;
+font-size: 0.7rem;
+letter-spacing: 0.15em;
+text-transform: uppercase;
+color: var(–accent);
+border: 1px solid rgba(232,255,71,0.3);
+display: inline-block;
+padding: 0.25rem 0.75rem;
+margin-bottom: 1.2rem;
+}
+h1 {
+font-family: ‘Syne’, sans-serif;
+font-size: clamp(2.4rem, 5vw, 4rem);
+font-weight: 800;
+line-height: 1.05;
+letter-spacing: -0.02em;
+max-width: 680px;
+}
+h1 span { color: var(–accent); }
+.subtitle {
+margin-top: 1rem;
+color: var(–muted);
+font-size: 1rem;
+max-width: 540px;
+}
+.meta-row {
+display: flex;
+gap: 2rem;
+margin-top: 2rem;
+flex-wrap: wrap;
+}
+.meta-item {
+font-family: ‘DM Mono’, monospace;
+font-size: 0.72rem;
+color: var(–muted);
+letter-spacing: 0.08em;
+}
+.meta-item strong { color: var(–text); }
+
+/* LAYOUT */
+main {
+max-width: 900px;
+margin: 0 auto;
+padding: 3rem 4rem 5rem;
+}
+
+/* PHASE HEADER */
+.phase {
+margin-top: 3.5rem;
+}
+.phase-label {
+display: flex;
+align-items: center;
+gap: 1rem;
+margin-bottom: 1.5rem;
+}
+.phase-num {
+font-family: ‘DM Mono’, monospace;
+font-size: 0.65rem;
+color: var(–accent);
+letter-spacing: 0.12em;
+background: rgba(232,255,71,0.08);
+border: 1px solid rgba(232,255,71,0.2);
+padding: 0.2rem 0.6rem;
+white-space: nowrap;
+}
+.phase-line {
+flex: 1;
+height: 1px;
+background: var(–border);
+}
+.phase-title {
+font-family: ‘Syne’, sans-serif;
+font-size: 1.5rem;
+font-weight: 700;
+letter-spacing: -0.01em;
+margin-bottom: 0.4rem;
+}
+.phase-desc {
+color: var(–muted);
+font-size: 0.9rem;
+margin-bottom: 1.8rem;
+}
+
+/* STEPS */
+.steps { display: flex; flex-direction: column; gap: 0.75rem; }
+
+.step {
+background: var(–step-bg);
+border: 1px solid var(–border);
+padding: 1.25rem 1.5rem;
+display: grid;
+grid-template-columns: 28px 1fr;
+gap: 1rem;
+align-items: start;
+transition: border-color 0.2s;
+}
+.step:hover { border-color: #2e2e2e; }
+
+.step-n {
+font-family: ‘DM Mono’, monospace;
+font-size: 0.7rem;
+color: var(–accent2);
+padding-top: 0.15rem;
+font-weight: 500;
+}
+.step-content {}
+.step-title {
+font-weight: 500;
+font-size: 0.95rem;
+margin-bottom: 0.35rem;
+color: #f0f0e8;
+}
+.step-body {
+font-size: 0.875rem;
+color: var(–muted);
+line-height: 1.65;
+}
+.step-body strong { color: #c8c8c0; font-weight: 500; }
+
+/* TOOL PILLS */
+.tools {
+display: flex;
+flex-wrap: wrap;
+gap: 0.4rem;
+margin-top: 0.75rem;
+}
+.tool {
+font-family: ‘DM Mono’, monospace;
+font-size: 0.65rem;
+letter-spacing: 0.05em;
+background: #1a1a1a;
+border: 1px solid #252525;
+color: #888880;
+padding: 0.2rem 0.55rem;
+}
+.tool.free { border-color: rgba(232,255,71,0.2); color: rgba(232,255,71,0.6); }
+.tool.paid { border-color: rgba(255,107,53,0.2); color: rgba(255,107,53,0.6); }
+
+/* CALLOUT */
+.callout {
+border-left: 2px solid var(–accent);
+background: rgba(232,255,71,0.04);
+padding: 1rem 1.25rem;
+margin: 1.5rem 0;
+font-size: 0.875rem;
+}
+.callout .callout-label {
+font-family: ‘DM Mono’, monospace;
+font-size: 0.65rem;
+letter-spacing: 0.12em;
+color: var(–accent);
+margin-bottom: 0.4rem;
+text-transform: uppercase;
+}
+
+/* WORKFLOW TIMELINE */
+.timeline {
+margin: 2rem 0;
+display: flex;
+flex-direction: column;
+gap: 0;
+}
+.tl-item {
+display: grid;
+grid-template-columns: 80px 1px 1fr;
+gap: 0 1.25rem;
+min-height: 56px;
+}
+.tl-time {
+font-family: ‘DM Mono’, monospace;
+font-size: 0.7rem;
+color: var(–accent2);
+padding-top: 0.1rem;
+text-align: right;
+}
+.tl-line-wrap {
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+.tl-dot {
+width: 7px; height: 7px;
+background: var(–accent);
+border-radius: 50%;
+margin-top: 4px;
+flex-shrink: 0;
+}
+.tl-connector {
+flex: 1;
+width: 1px;
+background: var(–border);
+margin: 3px 0;
+}
+.tl-item:last-child .tl-connector { display: none; }
+.tl-text {
+padding-bottom: 1.5rem;
+}
+.tl-label {
+font-weight: 500;
+font-size: 0.9rem;
+margin-bottom: 0.2rem;
+}
+.tl-detail {
+font-size: 0.82rem;
+color: var(–muted);
+}
+
+/* NICHE TABLE */
+.niche-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+gap: 0.6rem;
+margin: 1rem 0;
+}
+.niche-card {
+background: var(–step-bg);
+border: 1px solid var(–border);
+padding: 0.9rem 1.1rem;
+}
+.niche-card .niche-name {
+font-weight: 500;
+font-size: 0.875rem;
+margin-bottom: 0.2rem;
+}
+.niche-card .niche-why {
+font-size: 0.78rem;
+color: var(–muted);
+}
+
+/* DIVIDER */
+.divider {
+border: none;
+border-top: 1px solid var(–border);
+margin: 3.5rem 0;
+}
+
+/* FOOTER CALLOUT */
+.final-callout {
+background: var(–step-bg);
+border: 1px solid var(–border);
+border-left: 3px solid var(–accent2);
+padding: 1.5rem 1.75rem;
+margin-top: 3rem;
+}
+.final-callout h3 {
+font-family: ‘Syne’, sans-serif;
+font-size: 1.1rem;
+font-weight: 700;
+margin-bottom: 0.6rem;
+}
+
+@media (max-width: 640px) {
+header, main { padding-left: 1.5rem; padding-right: 1.5rem; }
+h1 { font-size: 2rem; }
+.tl-time { font-size: 0.62rem; }
+}
+</style>
+
+</head>
+<body>
+
+<header>
+  <div class="tag">Operational Playbook</div>
+  <h1>The Faceless Video<br><span>Daily System</span></h1>
+  <p class="subtitle">A repeatable, tool-assisted workflow to script, produce, and publish faceless videos every day — without appearing on camera.</p>
+  <div class="meta-row">
+    <div class="meta-item">TIME PER VIDEO <strong>45–90 min</strong></div>
+    <div class="meta-item">SKILL LEVEL <strong>Beginner–Intermediate</strong></div>
+    <div class="meta-item">COST TO START <strong>$0–30/mo</strong></div>
+  </div>
+</header>
+
+<main>
+
+  <!-- PHASE 0: FOUNDATION -->
+
+  <div class="phase">
+    <div class="phase-label">
+      <span class="phase-num">PHASE 00 — DO ONCE</span>
+      <div class="phase-line"></div>
+    </div>
+    <div class="phase-title">Build Your Foundation</div>
+    <p class="phase-desc">Before you film anything, lock in the decisions that make daily production fast and consistent.</p>
+
+```
+<div class="steps">
+  <div class="step">
+    <div class="step-n">01</div>
+    <div class="step-content">
+      <div class="step-title">Choose a Niche with Evergreen Demand</div>
+      <div class="step-body">
+        Pick one niche and stick to it. The algorithm rewards consistency. Choose something with <strong>high search volume, low production complexity, and content you can generate daily.</strong>
+        <div class="niche-grid" style="margin-top:0.9rem;">
+          <div class="niche-card"><div class="niche-name">Finance Tips</div><div class="niche-why">High CPM, endless topics</div></div>
+          <div class="niche-card"><div class="niche-name">History / Facts</div><div class="niche-why">Stock footage available everywhere</div></div>
+          <div class="niche-card"><div class="niche-name">Motivational</div><div class="niche-why">Simple visuals, broad audience</div></div>
+          <div class="niche-card"><div class="niche-name">AI / Tech Tips</div><div class="niche-why">Trending, screen-recordable</div></div>
+          <div class="niche-card"><div class="niche-name">Health & Wellness</div><div class="niche-why">Infographic-friendly, evergreen</div></div>
+          <div class="niche-card"><div class="niche-name">True Crime / Mystery</div><div class="niche-why">High watch time, viral potential</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-n">02</div>
+    <div class="step-content">
+      <div class="step-title">Set Up Your Asset Library</div>
+      <div class="step-body">
+        Create a folder system you'll reuse daily: <strong>/Scripts, /Voiceovers, /Footage, /Music, /Exports.</strong> Bookmark 3–5 stock footage sites and pre-download a batch of royalty-free background music. Having assets ready eliminates the #1 daily bottleneck.
+        <div class="tools">
+          <span class="tool free">Pexels (free)</span>
+          <span class="tool free">Pixabay (free)</span>
+          <span class="tool free">Coverr (free)</span>
+          <span class="tool paid">Storyblocks (paid)</span>
+          <span class="tool free">YouTube Audio Library</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-n">03</div>
+    <div class="step-content">
+      <div class="step-title">Create a Brand Template</div>
+      <div class="step-body">
+        Design one video template: same font, color palette, lower-thirds style, and intro/outro (3–5 sec each). Save it as a project file in your editor. Every daily video starts from this template — <strong>you never design from scratch again.</strong>
+        <div class="tools">
+          <span class="tool free">CapCut (free)</span>
+          <span class="tool paid">Adobe Premiere</span>
+          <span class="tool free">DaVinci Resolve (free)</span>
+          <span class="tool paid">OpusClip</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- PHASE 1: DAILY SCRIPT -->
+
+  <div class="phase">
+    <div class="phase-label">
+      <span class="phase-num">PHASE 01 — DAILY · ~10 MIN</span>
+      <div class="phase-line"></div>
+    </div>
+    <div class="phase-title">Script Generation</div>
+    <p class="phase-desc">Use AI to eliminate writer's block. Your job is to prompt and edit, not write from zero.</p>
+
+```
+<div class="steps">
+  <div class="step">
+    <div class="step-n">01</div>
+    <div class="step-content">
+      <div class="step-title">Generate a Hook + Script with AI</div>
+      <div class="step-body">
+        Open ChatGPT, Claude, or Gemini. Use this repeatable prompt structure:<br><br>
+        <strong>"Write a 60-second script for a faceless YouTube Short about [TOPIC]. Start with a 1-sentence hook that creates curiosity. Use short sentences. No filler words. End with a call to action to follow for more."</strong><br><br>
+        Edit for accuracy and your brand voice. Target <strong>130–160 words</strong> for a 60-second video.
+        <div class="tools">
+          <span class="tool free">Claude.ai (free)</span>
+          <span class="tool free">ChatGPT (free tier)</span>
+          <span class="tool free">Gemini (free)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-n">02</div>
+    <div class="step-content">
+      <div class="step-title">Build a Content Calendar (Once a Week)</div>
+      <div class="step-body">
+        Every Sunday, generate 7 topics at once using AI: <strong>"Give me 7 video topic ideas for a [NICHE] channel. Each should be a specific, searchable question or surprising fact."</strong> Paste results into a simple spreadsheet. Each morning, you just pull the next topic — no decision fatigue.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="callout">
+  <div class="callout-label">⚡ Pro Tip</div>
+  Save your best-performing AI prompt as a text snippet (use Raycast, TextExpander, or a notes app). Type one shortcut and your full prompt appears instantly.
+</div>
+```
+
+  </div>
+
+  <!-- PHASE 2: VOICEOVER -->
+
+  <div class="phase">
+    <div class="phase-label">
+      <span class="phase-num">PHASE 02 — DAILY · ~5 MIN</span>
+      <div class="phase-line"></div>
+    </div>
+    <div class="phase-title">Voiceover Production</div>
+    <p class="phase-desc">Your voice never appears. AI voices are now indistinguishable from human narrators at good settings.</p>
+
+```
+<div class="steps">
+  <div class="step">
+    <div class="step-n">01</div>
+    <div class="step-content">
+      <div class="step-title">Generate AI Voiceover</div>
+      <div class="step-body">
+        Paste your script into a text-to-speech tool. Choose a voice that matches your brand (warm, authoritative, energetic). <strong>ElevenLabs produces the most natural results.</strong> Download as MP3. Most platforms give enough free credits for 1–2 videos/day.
+        <div class="tools">
+          <span class="tool free">ElevenLabs (free tier)</span>
+          <span class="tool free">Murf.ai (free tier)</span>
+          <span class="tool free">PlayHT (free tier)</span>
+          <span class="tool free">TikTok TTS (built-in)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-n">02</div>
+    <div class="step-content">
+      <div class="step-title">Optional: Record Your Own Voice (Stay Faceless)</div>
+      <div class="step-body">
+        If you want authenticity without showing your face, record yourself reading the script. Use your phone's voice memo app in a quiet room. <strong>Run it through Adobe Podcast Enhance</strong> (free) for instant studio-quality cleanup. This takes 5 minutes and keeps the channel 100% faceless.
+        <div class="tools">
+          <span class="tool free">Adobe Podcast Enhance (free)</span>
+          <span class="tool free">Audacity (free)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- PHASE 3: VIDEO ASSEMBLY -->
+
+  <div class="phase">
+    <div class="phase-label">
+      <span class="phase-num">PHASE 03 — DAILY · ~20–40 MIN</span>
+      <div class="phase-line"></div>
+    </div>
+    <div class="phase-title">Video Assembly</div>
+    <p class="phase-desc">The most time-intensive phase. Keep it fast by working from your template and using AI-assisted tools.</p>
+
+```
+<div class="steps">
+  <div class="step">
+    <div class="step-n">01</div>
+    <div class="step-content">
+      <div class="step-title">Open Your Template & Import Voiceover</div>
+      <div class="step-body">
+        Open your saved editor project template. Import your voiceover file. This is your audio backbone — all visuals will be cut to match it. <strong>Never start with visuals first.</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-n">02</div>
+    <div class="step-content">
+      <div class="step-title">Add Stock Footage or Screen Recordings</div>
+      <div class="step-body">
+        Pull clips from your pre-downloaded asset library. Match visuals to what's being said — <strong>every 3–5 seconds, cut to a new clip</strong> to maintain attention. For finance/info topics, use simple animated text over B-roll. For tech topics, screen record your workflow.
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-n">03</div>
+    <div class="step-content">
+      <div class="step-title">Add Captions Automatically</div>
+      <div class="step-body">
+        Auto-generate captions from your voiceover. <strong>Captions increase watch time by 12–30%</strong> across all platforms. Use bold, high-contrast text. CapCut's auto-caption feature handles this in one click.
+        <div class="tools">
+          <span class="tool free">CapCut Auto-Caption (free)</span>
+          <span class="tool paid">Submagic (paid)</span>
+          <span class="tool free">Clideo (free)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-n">04</div>
+    <div class="step-content">
+      <div class="step-title">Add Background Music & Sound Effects</div>
+      <div class="step-body">
+        Pull a track from your pre-saved music folder. Set volume to <strong>8–15% of voiceover level</strong> — it should be felt, not heard. Add 1–2 sound effects at key moments (whoosh on text reveal, chime on CTA). Export at 1080×1920 for Shorts/Reels/TikTok.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="callout">
+  <div class="callout-label">🚀 Speed Route</div>
+  <strong>Use an all-in-one AI video tool</strong> to collapse phases 1–3 into a single workflow. Tools like <strong>Pictory, InVideo AI, or HeyGen</strong> can take your script and auto-assemble a full video with stock footage, voiceover, and captions in under 5 minutes. Quality is lower, but speed is unmatched for daily volume.
+  <div class="tools" style="margin-top:0.65rem;">
+    <span class="tool paid">Pictory AI</span>
+    <span class="tool paid">InVideo AI</span>
+    <span class="tool paid">HeyGen</span>
+    <span class="tool free">Canva Video (free)</span>
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- PHASE 4: PUBLISH -->
+
+  <div class="phase">
+    <div class="phase-label">
+      <span class="phase-num">PHASE 04 — DAILY · ~10 MIN</span>
+      <div class="phase-line"></div>
+    </div>
+    <div class="phase-title">Publish & Distribute</div>
+    <p class="phase-desc">One video, multiple platforms. Maximize reach without making multiple videos.</p>
+
+```
+<div class="steps">
+  <div class="step">
+    <div class="step-n">01</div>
+    <div class="step-content">
+      <div class="step-title">Write an Optimized Title & Description with AI</div>
+      <div class="step-body">
+        Prompt: <strong>"Write 3 YouTube title options for a video about [TOPIC]. Make them curiosity-driven, under 60 characters, and include the keyword. Then write a 150-word SEO description."</strong> Pick the best title. Paste the description in.
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-n">02</div>
+    <div class="step-content">
+      <div class="step-title">Create a Thumbnail (60 Seconds)</div>
+      <div class="step-body">
+        Open a saved Canva thumbnail template. Change the text and background image only. <strong>Bold text + high contrast + a number or question mark = high CTR.</strong> Export and upload. Never design from scratch.
+        <div class="tools">
+          <span class="tool free">Canva (free)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-n">03</div>
+    <div class="step-content">
+      <div class="step-title">Cross-Post to All Platforms</div>
+      <div class="step-body">
+        Upload the same 9:16 video to <strong>YouTube Shorts, TikTok, Instagram Reels, and Facebook Reels.</strong> Use a scheduler to queue everything in one session. You only create once — the algorithm does the rest across four audiences.
+        <div class="tools">
+          <span class="tool free">Buffer (free tier)</span>
+          <span class="tool paid">Metricool</span>
+          <span class="tool paid">Later</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+
+  <hr class="divider">
+
+  <!-- DAILY TIMELINE -->
+
+  <div class="phase-title" style="margin-bottom:0.4rem;">Your Daily Production Timeline</div>
+  <p class="phase-desc" style="margin-bottom:1.5rem;">A suggested schedule to keep total production under 90 minutes.</p>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-time">0:00</div>
+      <div class="tl-line-wrap"><div class="tl-dot"></div><div class="tl-connector"></div></div>
+      <div class="tl-text"><div class="tl-label">Pull today's topic from your calendar</div><div class="tl-detail">Open your weekly spreadsheet, grab the pre-planned topic.</div></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">0:02</div>
+      <div class="tl-line-wrap"><div class="tl-dot"></div><div class="tl-connector"></div></div>
+      <div class="tl-text"><div class="tl-label">Generate & edit script with AI</div><div class="tl-detail">Use your saved prompt. Edit output for accuracy. ~10 min.</div></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">0:12</div>
+      <div class="tl-line-wrap"><div class="tl-dot"></div><div class="tl-connector"></div></div>
+      <div class="tl-text"><div class="tl-label">Generate voiceover</div><div class="tl-detail">Paste script into ElevenLabs or record yourself. Download MP3. ~5 min.</div></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">0:17</div>
+      <div class="tl-line-wrap"><div class="tl-dot"></div><div class="tl-connector"></div></div>
+      <div class="tl-text"><div class="tl-label">Assemble video from template</div><div class="tl-detail">Add footage, captions, music. Export at 1080×1920. ~30–50 min.</div></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">1:07</div>
+      <div class="tl-line-wrap"><div class="tl-dot"></div><div class="tl-connector"></div></div>
+      <div class="tl-text"><div class="tl-label">Write title, description & thumbnail</div><div class="tl-detail">AI generates copy. Canva template for thumbnail. ~8 min.</div></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">1:15</div>
+      <div class="tl-line-wrap"><div class="tl-dot"></div><div class="tl-connector"></div></div>
+      <div class="tl-text"><div class="tl-label">Schedule & publish to all platforms</div><div class="tl-detail">Upload once via scheduler. Queue posts. Done. ~5 min.</div></div>
+    </div>
+  </div>
+
+  <div class="final-callout">
+    <h3>The Golden Rule of Daily Posting</h3>
+    <p style="font-size:0.9rem; color:var(--muted); line-height:1.7;">
+      <strong style="color:var(--text);">Speed beats perfection.</strong> A good video published daily will always outperform a perfect video published weekly. The algorithm rewards consistency and volume. Your first 30 videos are practice — ship them anyway. Optimize based on what the data tells you after week 4.
+    </p>
+  </div>
+
+</main>
+
+</body>
+</html>
