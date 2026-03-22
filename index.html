@@ -1,315 +1,489 @@
-<!DOCTYPE html>
+Perfect! Let's tackle these one at a time. We'll start with **Fixing the CSS and adding interactive components** as our foundation, then build the other features on top.
 
+## Step 1: Fix CSS & Add Interactive Component Foundation
+
+First, let me give you the updated HTML with:
+1. Fixed CSS variables
+2. A clean interactive section structure
+3. Base JavaScript framework for the other features
+
+Here's the updated code. **Replace your entire current HTML with this:**
+
+```html
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Faceless Video System</title>
+<title>Faceless Video System | Interactive Production Suite</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap');
 
-:root {
-  --bg: #0a0a0a;
-  --surface: #111111;
-  --border: #1e1e1e;
-  --accent: #e8ff47;
-  --accent2: #ff6b35;
-  --text: #e8e8e0;
-  --muted: #666660;
-  --step-bg: #141414;
-}
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --border: #1e1e1e;
+    --accent: #e8ff47;
+    --accent2: #ff6b35;
+    --text: #e8e8e0;
+    --muted: #666660;
+    --step-bg: #141414;
+    --card-bg: #1a1a1a;
+  }
 
-- { margin: 0; padding: 0; box-sizing: border-box; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-body {
-background: var(–bg);
-color: var(–text);
-font-family: ‘DM Sans’, sans-serif;
-font-weight: 300;
-line-height: 1.7;
-min-height: 100vh;
-}
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
 
-/* HEADER */
-header {
-border-bottom: 1px solid var(–border);
-padding: 3rem 4rem 2.5rem;
-position: relative;
-overflow: hidden;
-}
-header::before {
-content: ‘’;
-position: absolute;
-top: -60px; left: -60px;
-width: 340px; height: 340px;
-background: radial-gradient(circle, rgba(232,255,71,0.07) 0%, transparent 70%);
-pointer-events: none;
-}
-.tag {
-font-family: ‘DM Mono’, monospace;
-font-size: 0.7rem;
-letter-spacing: 0.15em;
-text-transform: uppercase;
-color: var(–accent);
-border: 1px solid rgba(232,255,71,0.3);
-display: inline-block;
-padding: 0.25rem 0.75rem;
-margin-bottom: 1.2rem;
-}
-h1 {
-font-family: ‘Syne’, sans-serif;
-font-size: clamp(2.4rem, 5vw, 4rem);
-font-weight: 800;
-line-height: 1.05;
-letter-spacing: -0.02em;
-max-width: 680px;
-}
-h1 span { color: var(–accent); }
-.subtitle {
-margin-top: 1rem;
-color: var(–muted);
-font-size: 1rem;
-max-width: 540px;
-}
-.meta-row {
-display: flex;
-gap: 2rem;
-margin-top: 2rem;
-flex-wrap: wrap;
-}
-.meta-item {
-font-family: ‘DM Mono’, monospace;
-font-size: 0.72rem;
-color: var(–muted);
-letter-spacing: 0.08em;
-}
-.meta-item strong { color: var(–text); }
+  /* HEADER */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 3rem 4rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    left: -60px;
+    width: 340px;
+    height: 340px;
+    background: radial-gradient(circle, rgba(232,255,71,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(232,255,71,0.3);
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    margin-bottom: 1.2rem;
+  }
+  
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    max-width: 680px;
+  }
+  
+  h1 span { color: var(--accent); }
+  
+  .subtitle {
+    margin-top: 1rem;
+    color: var(--muted);
+    font-size: 1rem;
+    max-width: 540px;
+  }
+  
+  .meta-row {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+  
+  .meta-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+  
+  .meta-item strong { color: var(--text); }
 
-/* LAYOUT */
-main {
-max-width: 900px;
-margin: 0 auto;
-padding: 3rem 4rem 5rem;
-}
+  /* LAYOUT */
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 4rem 5rem;
+  }
 
-/* PHASE HEADER */
-.phase {
-margin-top: 3.5rem;
-}
-.phase-label {
-display: flex;
-align-items: center;
-gap: 1rem;
-margin-bottom: 1.5rem;
-}
-.phase-num {
-font-family: ‘DM Mono’, monospace;
-font-size: 0.65rem;
-color: var(–accent);
-letter-spacing: 0.12em;
-background: rgba(232,255,71,0.08);
-border: 1px solid rgba(232,255,71,0.2);
-padding: 0.2rem 0.6rem;
-white-space: nowrap;
-}
-.phase-line {
-flex: 1;
-height: 1px;
-background: var(–border);
-}
-.phase-title {
-font-family: ‘Syne’, sans-serif;
-font-size: 1.5rem;
-font-weight: 700;
-letter-spacing: -0.01em;
-margin-bottom: 0.4rem;
-}
-.phase-desc {
-color: var(–muted);
-font-size: 0.9rem;
-margin-bottom: 1.8rem;
-}
-
-/* STEPS */
-.steps { display: flex; flex-direction: column; gap: 0.75rem; }
-
-.step {
-background: var(–step-bg);
-border: 1px solid var(–border);
-padding: 1.25rem 1.5rem;
-display: grid;
-grid-template-columns: 28px 1fr;
-gap: 1rem;
-align-items: start;
-transition: border-color 0.2s;
-}
-.step:hover { border-color: #2e2e2e; }
-
-.step-n {
-font-family: ‘DM Mono’, monospace;
-font-size: 0.7rem;
-color: var(–accent2);
-padding-top: 0.15rem;
-font-weight: 500;
-}
-.step-content {}
-.step-title {
-font-weight: 500;
-font-size: 0.95rem;
-margin-bottom: 0.35rem;
-color: #f0f0e8;
-}
-.step-body {
-font-size: 0.875rem;
-color: var(–muted);
-line-height: 1.65;
-}
-.step-body strong { color: #c8c8c0; font-weight: 500; }
-
-/* TOOL PILLS */
-.tools {
-display: flex;
-flex-wrap: wrap;
-gap: 0.4rem;
-margin-top: 0.75rem;
-}
-.tool {
-font-family: ‘DM Mono’, monospace;
-font-size: 0.65rem;
-letter-spacing: 0.05em;
-background: #1a1a1a;
-border: 1px solid #252525;
-color: #888880;
-padding: 0.2rem 0.55rem;
-}
-.tool.free { border-color: rgba(232,255,71,0.2); color: rgba(232,255,71,0.6); }
-.tool.paid { border-color: rgba(255,107,53,0.2); color: rgba(255,107,53,0.6); }
-
-/* CALLOUT */
-.callout {
-border-left: 2px solid var(–accent);
-background: rgba(232,255,71,0.04);
-padding: 1rem 1.25rem;
-margin: 1.5rem 0;
-font-size: 0.875rem;
-}
-.callout .callout-label {
-font-family: ‘DM Mono’, monospace;
-font-size: 0.65rem;
-letter-spacing: 0.12em;
-color: var(–accent);
-margin-bottom: 0.4rem;
-text-transform: uppercase;
-}
-
-/* WORKFLOW TIMELINE */
-.timeline {
-margin: 2rem 0;
-display: flex;
-flex-direction: column;
-gap: 0;
-}
-.tl-item {
-display: grid;
-grid-template-columns: 80px 1px 1fr;
-gap: 0 1.25rem;
-min-height: 56px;
-}
-.tl-time {
-font-family: ‘DM Mono’, monospace;
-font-size: 0.7rem;
-color: var(–accent2);
-padding-top: 0.1rem;
-text-align: right;
-}
-.tl-line-wrap {
-display: flex;
-flex-direction: column;
-align-items: center;
-}
-.tl-dot {
-width: 7px; height: 7px;
-background: var(–accent);
-border-radius: 50%;
-margin-top: 4px;
-flex-shrink: 0;
-}
-.tl-connector {
-flex: 1;
-width: 1px;
-background: var(–border);
-margin: 3px 0;
-}
-.tl-item:last-child .tl-connector { display: none; }
-.tl-text {
-padding-bottom: 1.5rem;
-}
-.tl-label {
-font-weight: 500;
-font-size: 0.9rem;
-margin-bottom: 0.2rem;
-}
-.tl-detail {
-font-size: 0.82rem;
-color: var(–muted);
-}
-
-/* NICHE TABLE */
-.niche-grid {
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-gap: 0.6rem;
-margin: 1rem 0;
-}
-.niche-card {
-background: var(–step-bg);
-border: 1px solid var(–border);
-padding: 0.9rem 1.1rem;
-}
-.niche-card .niche-name {
-font-weight: 500;
-font-size: 0.875rem;
-margin-bottom: 0.2rem;
-}
-.niche-card .niche-why {
-font-size: 0.78rem;
-color: var(–muted);
-}
-
-/* DIVIDER */
-.divider {
-border: none;
-border-top: 1px solid var(–border);
-margin: 3.5rem 0;
-}
-
-/* FOOTER CALLOUT */
-.final-callout {
-background: var(–step-bg);
-border: 1px solid var(–border);
-border-left: 3px solid var(–accent2);
-padding: 1.5rem 1.75rem;
-margin-top: 3rem;
-}
-.final-callout h3 {
-font-family: ‘Syne’, sans-serif;
-font-size: 1.1rem;
-font-weight: 700;
-margin-bottom: 0.6rem;
-}
-
-@media (max-width: 640px) {
-header, main { padding-left: 1.5rem; padding-right: 1.5rem; }
-h1 { font-size: 2rem; }
-.tl-time { font-size: 0.62rem; }
-}
+  /* INTERACTIVE TOOLS SECTION */
+  .tools-section {
+    margin-bottom: 4rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    overflow: hidden;
+  }
+  
+  .tools-header {
+    padding: 1.5rem 2rem;
+    background: rgba(232,255,71,0.03);
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .tools-header h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+  
+  .tools-header p {
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 0;
+  }
+  
+  .tool-card {
+    padding: 1.75rem;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+  
+  .tool-card:last-child {
+    border-right: none;
+  }
+  
+  .tool-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .tool-icon {
+    font-size: 1.3rem;
+  }
+  
+  /* Form Elements */
+  input, textarea, select {
+    width: 100%;
+    background: var(--step-bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.75rem 1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+    transition: border-color 0.2s;
+  }
+  
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  
+  button {
+    background: rgba(232,255,71,0.1);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 0.6rem 1.2rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  button:hover {
+    background: var(--accent);
+    color: var(--bg);
+  }
+  
+  button.primary {
+    background: var(--accent);
+    color: var(--bg);
+  }
+  
+  button.primary:hover {
+    background: rgba(232,255,71,0.8);
+  }
+  
+  .output-area {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--step-bg);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  .topic-item {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .topic-item:hover {
+    background: rgba(232,255,71,0.05);
+  }
+  
+  .topic-item:last-child {
+    border-bottom: none;
+  }
+  
+  .topic-title {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+  }
+  
+  .topic-date {
+    font-size: 0.7rem;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+  
+  /* PHASE STYLES (keeping your original structure) */
+  .phase {
+    margin-top: 3.5rem;
+  }
+  
+  .phase-label {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .phase-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    background: rgba(232,255,71,0.08);
+    border: 1px solid rgba(232,255,71,0.2);
+    padding: 0.2rem 0.6rem;
+    white-space: nowrap;
+  }
+  
+  .phase-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  
+  .phase-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.4rem;
+  }
+  
+  .phase-desc {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 1.8rem;
+  }
+  
+  .steps { display: flex; flex-direction: column; gap: 0.75rem; }
+  
+  .step {
+    background: var(--step-bg);
+    border: 1px solid var(--border);
+    padding: 1.25rem 1.5rem;
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 1rem;
+    align-items: start;
+    transition: border-color 0.2s;
+  }
+  
+  .step:hover { border-color: #2e2e2e; }
+  
+  .step-n {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent2);
+    padding-top: 0.15rem;
+    font-weight: 500;
+  }
+  
+  .step-title {
+    font-weight: 500;
+    font-size: 0.95rem;
+    margin-bottom: 0.35rem;
+    color: #f0f0e8;
+  }
+  
+  .step-body {
+    font-size: 0.875rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+  
+  .tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+  }
+  
+  .tool {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.05em;
+    background: #1a1a1a;
+    border: 1px solid #252525;
+    color: #888880;
+    padding: 0.2rem 0.55rem;
+  }
+  
+  .tool.free { border-color: rgba(232,255,71,0.2); color: rgba(232,255,71,0.6); }
+  .tool.paid { border-color: rgba(255,107,53,0.2); color: rgba(255,107,53,0.6); }
+  
+  .callout {
+    border-left: 2px solid var(--accent);
+    background: rgba(232,255,71,0.04);
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0;
+    font-size: 0.875rem;
+  }
+  
+  .timeline {
+    margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .tl-item {
+    display: grid;
+    grid-template-columns: 80px 1px 1fr;
+    gap: 0 1.25rem;
+    min-height: 56px;
+  }
+  
+  .tl-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent2);
+    padding-top: 0.1rem;
+    text-align: right;
+  }
+  
+  .tl-line-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .tl-dot {
+    width: 7px;
+    height: 7px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+  
+  .tl-connector {
+    flex: 1;
+    width: 1px;
+    background: var(--border);
+    margin: 3px 0;
+  }
+  
+  .tl-item:last-child .tl-connector { display: none; }
+  
+  .tl-text {
+    padding-bottom: 1.5rem;
+  }
+  
+  .tl-label {
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-bottom: 0.2rem;
+  }
+  
+  .tl-detail {
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+  
+  .niche-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.6rem;
+    margin: 1rem 0;
+  }
+  
+  .niche-card {
+    background: var(--step-bg);
+    border: 1px solid var(--border);
+    padding: 0.9rem 1.1rem;
+  }
+  
+  .niche-card .niche-name {
+    font-weight: 500;
+    font-size: 0.875rem;
+    margin-bottom: 0.2rem;
+  }
+  
+  .niche-card .niche-why {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 3.5rem 0;
+  }
+  
+  .final-callout {
+    background: var(--step-bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent2);
+    padding: 1.5rem 1.75rem;
+    margin-top: 3rem;
+  }
+  
+  .final-callout h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+  }
+  
+  @media (max-width: 640px) {
+    header, main { padding-left: 1.5rem; padding-right: 1.5rem; }
+    h1 { font-size: 2rem; }
+    .tl-time { font-size: 0.62rem; }
+    .tools-grid {
+      grid-template-columns: 1fr;
+    }
+    .tool-card {
+      border-right: none;
+    }
+  }
 </style>
-
 </head>
 <body>
 
 <header>
-  <div class="tag">Operational Playbook</div>
+  <div class="tag">Interactive Production Suite</div>
   <h1>The Faceless Video<br><span>Daily System</span></h1>
   <p class="subtitle">A repeatable, tool-assisted workflow to script, produce, and publish faceless videos every day — without appearing on camera.</p>
   <div class="meta-row">
@@ -321,8 +495,51 @@ h1 { font-size: 2rem; }
 
 <main>
 
-  <!-- PHASE 0: FOUNDATION -->
+  <!-- INTERACTIVE TOOLS SECTION - New -->
+  <div class="tools-section">
+    <div class="tools-header">
+      <h2>⚡ Production Tools</h2>
+      <p>Interactive tools to streamline your daily video creation workflow</p>
+    </div>
+    <div class="tools-grid">
+      <!-- Tool 1: AI Script Generator (placeholder for next step) -->
+      <div class="tool-card">
+        <h3><span class="tool-icon">✍️</span> AI Script Generator</h3>
+        <p style="color: var(--muted); font-size: 0.8rem; margin-bottom: 1rem;">Generate a 60-second faceless video script in seconds</p>
+        <input type="text" id="scriptTopic" placeholder="Enter your video topic..." style="margin-bottom: 0.5rem;">
+        <select id="scriptStyle" style="margin-bottom: 1rem;">
+          <option value="educational">Educational / How-to</option>
+          <option value="storytelling">Storytelling / Narrative</option>
+          <option value="list">List / Top X Format</option>
+          <option value="motivational">Motivational / Inspirational</option>
+        </select>
+        <button id="generateScriptBtn">Generate Script →</button>
+        <div id="scriptOutput" class="output-area" style="display: none;"></div>
+      </div>
+      
+      <!-- Tool 2: Asset Tracker (placeholder) -->
+      <div class="tool-card">
+        <h3><span class="tool-icon">📦</span> Asset Tracker</h3>
+        <p style="color: var(--muted); font-size: 0.8rem; margin-bottom: 1rem;">Track your scripts, voiceovers, and video assets</p>
+        <div id="assetStats" style="margin-bottom: 0.75rem; font-size: 0.8rem;">
+          <span>📝 Scripts: <strong id="scriptCount">0</strong></span> &nbsp;|&nbsp;
+          <span>🎥 Videos: <strong id="videoCount">0</strong></span>
+        </div>
+        <button id="viewAssetsBtn">View Asset Library →</button>
+        <div id="assetOutput" class="output-area" style="display: none; font-size: 0.8rem;"></div>
+      </div>
+      
+      <!-- Tool 3: Dynamic Topic Calendar (placeholder) -->
+      <div class="tool-card">
+        <h3><span class="tool-icon">📅</span> Topic Calendar</h3>
+        <p style="color: var(--muted); font-size: 0.8rem; margin-bottom: 1rem;">Generate and manage 7 days of content topics</p>
+        <button id="generateTopicsBtn">Generate 7 Topics →</button>
+        <div id="calendarOutput" class="output-area" style="display: none;"></div>
+      </div>
+    </div>
+  </div>
 
+  <!-- PHASE 00: FOUNDATION (keeping your original content) -->
   <div class="phase">
     <div class="phase-label">
       <span class="phase-num">PHASE 00 — DO ONCE</span>
@@ -331,65 +548,61 @@ h1 { font-size: 2rem; }
     <div class="phase-title">Build Your Foundation</div>
     <p class="phase-desc">Before you film anything, lock in the decisions that make daily production fast and consistent.</p>
 
-```
-<div class="steps">
-  <div class="step">
-    <div class="step-n">01</div>
-    <div class="step-content">
-      <div class="step-title">Choose a Niche with Evergreen Demand</div>
-      <div class="step-body">
-        Pick one niche and stick to it. The algorithm rewards consistency. Choose something with <strong>high search volume, low production complexity, and content you can generate daily.</strong>
-        <div class="niche-grid" style="margin-top:0.9rem;">
-          <div class="niche-card"><div class="niche-name">Finance Tips</div><div class="niche-why">High CPM, endless topics</div></div>
-          <div class="niche-card"><div class="niche-name">History / Facts</div><div class="niche-why">Stock footage available everywhere</div></div>
-          <div class="niche-card"><div class="niche-name">Motivational</div><div class="niche-why">Simple visuals, broad audience</div></div>
-          <div class="niche-card"><div class="niche-name">AI / Tech Tips</div><div class="niche-why">Trending, screen-recordable</div></div>
-          <div class="niche-card"><div class="niche-name">Health & Wellness</div><div class="niche-why">Infographic-friendly, evergreen</div></div>
-          <div class="niche-card"><div class="niche-name">True Crime / Mystery</div><div class="niche-why">High watch time, viral potential</div></div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">01</div>
+        <div class="step-content">
+          <div class="step-title">Choose a Niche with Evergreen Demand</div>
+          <div class="step-body">
+            Pick one niche and stick to it. The algorithm rewards consistency. Choose something with <strong>high search volume, low production complexity, and content you can generate daily.</strong>
+            <div class="niche-grid" style="margin-top:0.9rem;">
+              <div class="niche-card"><div class="niche-name">Finance Tips</div><div class="niche-why">High CPM, endless topics</div></div>
+              <div class="niche-card"><div class="niche-name">History / Facts</div><div class="niche-why">Stock footage available everywhere</div></div>
+              <div class="niche-card"><div class="niche-name">Motivational</div><div class="niche-why">Simple visuals, broad audience</div></div>
+              <div class="niche-card"><div class="niche-name">AI / Tech Tips</div><div class="niche-why">Trending, screen-recordable</div></div>
+              <div class="niche-card"><div class="niche-name">Health & Wellness</div><div class="niche-why">Infographic-friendly, evergreen</div></div>
+              <div class="niche-card"><div class="niche-name">True Crime / Mystery</div><div class="niche-why">High watch time, viral potential</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-n">02</div>
+        <div class="step-content">
+          <div class="step-title">Set Up Your Asset Library</div>
+          <div class="step-body">
+            Create a folder system you'll reuse daily: <strong>/Scripts, /Voiceovers, /Footage, /Music, /Exports.</strong> Bookmark 3–5 stock footage sites and pre-download a batch of royalty-free background music. Having assets ready eliminates the #1 daily bottleneck.
+            <div class="tools">
+              <span class="tool free">Pexels (free)</span>
+              <span class="tool free">Pixabay (free)</span>
+              <span class="tool free">Coverr (free)</span>
+              <span class="tool paid">Storyblocks (paid)</span>
+              <span class="tool free">YouTube Audio Library</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-n">03</div>
+        <div class="step-content">
+          <div class="step-title">Create a Brand Template</div>
+          <div class="step-body">
+            Design one video template: same font, color palette, lower-thirds style, and intro/outro (3–5 sec each). Save it as a project file in your editor. Every daily video starts from this template — <strong>you never design from scratch again.</strong>
+            <div class="tools">
+              <span class="tool free">CapCut (free)</span>
+              <span class="tool paid">Adobe Premiere</span>
+              <span class="tool free">DaVinci Resolve (free)</span>
+              <span class="tool paid">OpusClip</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="step">
-    <div class="step-n">02</div>
-    <div class="step-content">
-      <div class="step-title">Set Up Your Asset Library</div>
-      <div class="step-body">
-        Create a folder system you'll reuse daily: <strong>/Scripts, /Voiceovers, /Footage, /Music, /Exports.</strong> Bookmark 3–5 stock footage sites and pre-download a batch of royalty-free background music. Having assets ready eliminates the #1 daily bottleneck.
-        <div class="tools">
-          <span class="tool free">Pexels (free)</span>
-          <span class="tool free">Pixabay (free)</span>
-          <span class="tool free">Coverr (free)</span>
-          <span class="tool paid">Storyblocks (paid)</span>
-          <span class="tool free">YouTube Audio Library</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="step">
-    <div class="step-n">03</div>
-    <div class="step-content">
-      <div class="step-title">Create a Brand Template</div>
-      <div class="step-body">
-        Design one video template: same font, color palette, lower-thirds style, and intro/outro (3–5 sec each). Save it as a project file in your editor. Every daily video starts from this template — <strong>you never design from scratch again.</strong>
-        <div class="tools">
-          <span class="tool free">CapCut (free)</span>
-          <span class="tool paid">Adobe Premiere</span>
-          <span class="tool free">DaVinci Resolve (free)</span>
-          <span class="tool paid">OpusClip</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-```
-
   </div>
 
   <!-- PHASE 1: DAILY SCRIPT -->
-
   <div class="phase">
     <div class="phase-label">
       <span class="phase-num">PHASE 01 — DAILY · ~10 MIN</span>
@@ -398,46 +611,42 @@ h1 { font-size: 2rem; }
     <div class="phase-title">Script Generation</div>
     <p class="phase-desc">Use AI to eliminate writer's block. Your job is to prompt and edit, not write from zero.</p>
 
-```
-<div class="steps">
-  <div class="step">
-    <div class="step-n">01</div>
-    <div class="step-content">
-      <div class="step-title">Generate a Hook + Script with AI</div>
-      <div class="step-body">
-        Open ChatGPT, Claude, or Gemini. Use this repeatable prompt structure:<br><br>
-        <strong>"Write a 60-second script for a faceless YouTube Short about [TOPIC]. Start with a 1-sentence hook that creates curiosity. Use short sentences. No filler words. End with a call to action to follow for more."</strong><br><br>
-        Edit for accuracy and your brand voice. Target <strong>130–160 words</strong> for a 60-second video.
-        <div class="tools">
-          <span class="tool free">Claude.ai (free)</span>
-          <span class="tool free">ChatGPT (free tier)</span>
-          <span class="tool free">Gemini (free)</span>
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">01</div>
+        <div class="step-content">
+          <div class="step-title">Generate a Hook + Script with AI</div>
+          <div class="step-body">
+            Open ChatGPT, Claude, or Gemini. Use this repeatable prompt structure:<br><br>
+            <strong>"Write a 60-second script for a faceless YouTube Short about [TOPIC]. Start with a 1-sentence hook that creates curiosity. Use short sentences. No filler words. End with a call to action to follow for more."</strong><br><br>
+            Edit for accuracy and your brand voice. Target <strong>130–160 words</strong> for a 60-second video.
+            <div class="tools">
+              <span class="tool free">Claude.ai (free)</span>
+              <span class="tool free">ChatGPT (free tier)</span>
+              <span class="tool free">Gemini (free)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-n">02</div>
+        <div class="step-content">
+          <div class="step-title">Build a Content Calendar (Once a Week)</div>
+          <div class="step-body">
+            Every Sunday, generate 7 topics at once using AI: <strong>"Give me 7 video topic ideas for a [NICHE] channel. Each should be a specific, searchable question or surprising fact."</strong> Paste results into a simple spreadsheet. Each morning, you just pull the next topic — no decision fatigue.
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="step">
-    <div class="step-n">02</div>
-    <div class="step-content">
-      <div class="step-title">Build a Content Calendar (Once a Week)</div>
-      <div class="step-body">
-        Every Sunday, generate 7 topics at once using AI: <strong>"Give me 7 video topic ideas for a [NICHE] channel. Each should be a specific, searchable question or surprising fact."</strong> Paste results into a simple spreadsheet. Each morning, you just pull the next topic — no decision fatigue.
-      </div>
+    <div class="callout">
+      <div class="callout-label">⚡ Pro Tip</div>
+      Save your best-performing AI prompt as a text snippet (use Raycast, TextExpander, or a notes app). Type one shortcut and your full prompt appears instantly.
     </div>
-  </div>
-</div>
-
-<div class="callout">
-  <div class="callout-label">⚡ Pro Tip</div>
-  Save your best-performing AI prompt as a text snippet (use Raycast, TextExpander, or a notes app). Type one shortcut and your full prompt appears instantly.
-</div>
-```
-
   </div>
 
   <!-- PHASE 2: VOICEOVER -->
-
   <div class="phase">
     <div class="phase-label">
       <span class="phase-num">PHASE 02 — DAILY · ~5 MIN</span>
@@ -446,44 +655,40 @@ h1 { font-size: 2rem; }
     <div class="phase-title">Voiceover Production</div>
     <p class="phase-desc">Your voice never appears. AI voices are now indistinguishable from human narrators at good settings.</p>
 
-```
-<div class="steps">
-  <div class="step">
-    <div class="step-n">01</div>
-    <div class="step-content">
-      <div class="step-title">Generate AI Voiceover</div>
-      <div class="step-body">
-        Paste your script into a text-to-speech tool. Choose a voice that matches your brand (warm, authoritative, energetic). <strong>ElevenLabs produces the most natural results.</strong> Download as MP3. Most platforms give enough free credits for 1–2 videos/day.
-        <div class="tools">
-          <span class="tool free">ElevenLabs (free tier)</span>
-          <span class="tool free">Murf.ai (free tier)</span>
-          <span class="tool free">PlayHT (free tier)</span>
-          <span class="tool free">TikTok TTS (built-in)</span>
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">01</div>
+        <div class="step-content">
+          <div class="step-title">Generate AI Voiceover</div>
+          <div class="step-body">
+            Paste your script into a text-to-speech tool. Choose a voice that matches your brand (warm, authoritative, energetic). <strong>ElevenLabs produces the most natural results.</strong> Download as MP3. Most platforms give enough free credits for 1–2 videos/day.
+            <div class="tools">
+              <span class="tool free">ElevenLabs (free tier)</span>
+              <span class="tool free">Murf.ai (free tier)</span>
+              <span class="tool free">PlayHT (free tier)</span>
+              <span class="tool free">TikTok TTS (built-in)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-n">02</div>
+        <div class="step-content">
+          <div class="step-title">Optional: Record Your Own Voice (Stay Faceless)</div>
+          <div class="step-body">
+            If you want authenticity without showing your face, record yourself reading the script. Use your phone's voice memo app in a quiet room. <strong>Run it through Adobe Podcast Enhance</strong> (free) for instant studio-quality cleanup. This takes 5 minutes and keeps the channel 100% faceless.
+            <div class="tools">
+              <span class="tool free">Adobe Podcast Enhance (free)</span>
+              <span class="tool free">Audacity (free)</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="step">
-    <div class="step-n">02</div>
-    <div class="step-content">
-      <div class="step-title">Optional: Record Your Own Voice (Stay Faceless)</div>
-      <div class="step-body">
-        If you want authenticity without showing your face, record yourself reading the script. Use your phone's voice memo app in a quiet room. <strong>Run it through Adobe Podcast Enhance</strong> (free) for instant studio-quality cleanup. This takes 5 minutes and keeps the channel 100% faceless.
-        <div class="tools">
-          <span class="tool free">Adobe Podcast Enhance (free)</span>
-          <span class="tool free">Audacity (free)</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-```
-
   </div>
 
   <!-- PHASE 3: VIDEO ASSEMBLY -->
-
   <div class="phase">
     <div class="phase-label">
       <span class="phase-num">PHASE 03 — DAILY · ~20–40 MIN</span>
@@ -492,70 +697,66 @@ h1 { font-size: 2rem; }
     <div class="phase-title">Video Assembly</div>
     <p class="phase-desc">The most time-intensive phase. Keep it fast by working from your template and using AI-assisted tools.</p>
 
-```
-<div class="steps">
-  <div class="step">
-    <div class="step-n">01</div>
-    <div class="step-content">
-      <div class="step-title">Open Your Template & Import Voiceover</div>
-      <div class="step-body">
-        Open your saved editor project template. Import your voiceover file. This is your audio backbone — all visuals will be cut to match it. <strong>Never start with visuals first.</strong>
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">01</div>
+        <div class="step-content">
+          <div class="step-title">Open Your Template & Import Voiceover</div>
+          <div class="step-body">
+            Open your saved editor project template. Import your voiceover file. This is your audio backbone — all visuals will be cut to match it. <strong>Never start with visuals first.</strong>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <div class="step">
-    <div class="step-n">02</div>
-    <div class="step-content">
-      <div class="step-title">Add Stock Footage or Screen Recordings</div>
-      <div class="step-body">
-        Pull clips from your pre-downloaded asset library. Match visuals to what's being said — <strong>every 3–5 seconds, cut to a new clip</strong> to maintain attention. For finance/info topics, use simple animated text over B-roll. For tech topics, screen record your workflow.
+      <div class="step">
+        <div class="step-n">02</div>
+        <div class="step-content">
+          <div class="step-title">Add Stock Footage or Screen Recordings</div>
+          <div class="step-body">
+            Pull clips from your pre-downloaded asset library. Match visuals to what's being said — <strong>every 3–5 seconds, cut to a new clip</strong> to maintain attention. For finance/info topics, use simple animated text over B-roll. For tech topics, screen record your workflow.
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <div class="step">
-    <div class="step-n">03</div>
-    <div class="step-content">
-      <div class="step-title">Add Captions Automatically</div>
-      <div class="step-body">
-        Auto-generate captions from your voiceover. <strong>Captions increase watch time by 12–30%</strong> across all platforms. Use bold, high-contrast text. CapCut's auto-caption feature handles this in one click.
-        <div class="tools">
-          <span class="tool free">CapCut Auto-Caption (free)</span>
-          <span class="tool paid">Submagic (paid)</span>
-          <span class="tool free">Clideo (free)</span>
+      <div class="step">
+        <div class="step-n">03</div>
+        <div class="step-content">
+          <div class="step-title">Add Captions Automatically</div>
+          <div class="step-body">
+            Auto-generate captions from your voiceover. <strong>Captions increase watch time by 12–30%</strong> across all platforms. Use bold, high-contrast text. CapCut's auto-caption feature handles this in one click.
+            <div class="tools">
+              <span class="tool free">CapCut Auto-Caption (free)</span>
+              <span class="tool paid">Submagic (paid)</span>
+              <span class="tool free">Clideo (free)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-n">04</div>
+        <div class="step-content">
+          <div class="step-title">Add Background Music & Sound Effects</div>
+          <div class="step-body">
+            Pull a track from your pre-saved music folder. Set volume to <strong>8–15% of voiceover level</strong> — it should be felt, not heard. Add 1–2 sound effects at key moments (whoosh on text reveal, chime on CTA). Export at 1080×1920 for Shorts/Reels/TikTok.
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="step">
-    <div class="step-n">04</div>
-    <div class="step-content">
-      <div class="step-title">Add Background Music & Sound Effects</div>
-      <div class="step-body">
-        Pull a track from your pre-saved music folder. Set volume to <strong>8–15% of voiceover level</strong> — it should be felt, not heard. Add 1–2 sound effects at key moments (whoosh on text reveal, chime on CTA). Export at 1080×1920 for Shorts/Reels/TikTok.
+    <div class="callout">
+      <div class="callout-label">🚀 Speed Route</div>
+      <strong>Use an all-in-one AI video tool</strong> to collapse phases 1–3 into a single workflow. Tools like <strong>Pictory, InVideo AI, or HeyGen</strong> can take your script and auto-assemble a full video with stock footage, voiceover, and captions in under 5 minutes. Quality is lower, but speed is unmatched for daily volume.
+      <div class="tools" style="margin-top:0.65rem;">
+        <span class="tool paid">Pictory AI</span>
+        <span class="tool paid">InVideo AI</span>
+        <span class="tool paid">HeyGen</span>
+        <span class="tool free">Canva Video (free)</span>
       </div>
     </div>
   </div>
-</div>
-
-<div class="callout">
-  <div class="callout-label">🚀 Speed Route</div>
-  <strong>Use an all-in-one AI video tool</strong> to collapse phases 1–3 into a single workflow. Tools like <strong>Pictory, InVideo AI, or HeyGen</strong> can take your script and auto-assemble a full video with stock footage, voiceover, and captions in under 5 minutes. Quality is lower, but speed is unmatched for daily volume.
-  <div class="tools" style="margin-top:0.65rem;">
-    <span class="tool paid">Pictory AI</span>
-    <span class="tool paid">InVideo AI</span>
-    <span class="tool paid">HeyGen</span>
-    <span class="tool free">Canva Video (free)</span>
-  </div>
-</div>
-```
-
-  </div>
 
   <!-- PHASE 4: PUBLISH -->
-
   <div class="phase">
     <div class="phase-label">
       <span class="phase-num">PHASE 04 — DAILY · ~10 MIN</span>
@@ -564,54 +765,50 @@ h1 { font-size: 2rem; }
     <div class="phase-title">Publish & Distribute</div>
     <p class="phase-desc">One video, multiple platforms. Maximize reach without making multiple videos.</p>
 
-```
-<div class="steps">
-  <div class="step">
-    <div class="step-n">01</div>
-    <div class="step-content">
-      <div class="step-title">Write an Optimized Title & Description with AI</div>
-      <div class="step-body">
-        Prompt: <strong>"Write 3 YouTube title options for a video about [TOPIC]. Make them curiosity-driven, under 60 characters, and include the keyword. Then write a 150-word SEO description."</strong> Pick the best title. Paste the description in.
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">01</div>
+        <div class="step-content">
+          <div class="step-title">Write an Optimized Title & Description with AI</div>
+          <div class="step-body">
+            Prompt: <strong>"Write 3 YouTube title options for a video about [TOPIC]. Make them curiosity-driven, under 60 characters, and include the keyword. Then write a 150-word SEO description."</strong> Pick the best title. Paste the description in.
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <div class="step">
-    <div class="step-n">02</div>
-    <div class="step-content">
-      <div class="step-title">Create a Thumbnail (60 Seconds)</div>
-      <div class="step-body">
-        Open a saved Canva thumbnail template. Change the text and background image only. <strong>Bold text + high contrast + a number or question mark = high CTR.</strong> Export and upload. Never design from scratch.
-        <div class="tools">
-          <span class="tool free">Canva (free)</span>
+      <div class="step">
+        <div class="step-n">02</div>
+        <div class="step-content">
+          <div class="step-title">Create a Thumbnail (60 Seconds)</div>
+          <div class="step-body">
+            Open a saved Canva thumbnail template. Change the text and background image only. <strong>Bold text + high contrast + a number or question mark = high CTR.</strong> Export and upload. Never design from scratch.
+            <div class="tools">
+              <span class="tool free">Canva (free)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-n">03</div>
+        <div class="step-content">
+          <div class="step-title">Cross-Post to All Platforms</div>
+          <div class="step-body">
+            Upload the same 9:16 video to <strong>YouTube Shorts, TikTok, Instagram Reels, and Facebook Reels.</strong> Use a scheduler to queue everything in one session. You only create once — the algorithm does the rest across four audiences.
+            <div class="tools">
+              <span class="tool free">Buffer (free tier)</span>
+              <span class="tool paid">Metricool</span>
+              <span class="tool paid">Later</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="step">
-    <div class="step-n">03</div>
-    <div class="step-content">
-      <div class="step-title">Cross-Post to All Platforms</div>
-      <div class="step-body">
-        Upload the same 9:16 video to <strong>YouTube Shorts, TikTok, Instagram Reels, and Facebook Reels.</strong> Use a scheduler to queue everything in one session. You only create once — the algorithm does the rest across four audiences.
-        <div class="tools">
-          <span class="tool free">Buffer (free tier)</span>
-          <span class="tool paid">Metricool</span>
-          <span class="tool paid">Later</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-```
-
   </div>
 
   <hr class="divider">
 
-  <!-- DAILY TIMELINE -->
-
+ <!-- DAILY TIMELINE -->
   <div class="phase-title" style="margin-bottom:0.4rem;">Your Daily Production Timeline</div>
   <p class="phase-desc" style="margin-bottom:1.5rem;">A suggested schedule to keep total production under 90 minutes.</p>
 
@@ -656,6 +853,250 @@ h1 { font-size: 2rem; }
   </div>
 
 </main>
+
+<script>
+  // ============================================
+  // INTERACTIVE TOOLS - BASE FUNCTIONALITY
+  // ============================================
+  
+  // Asset Tracker using localStorage
+  let assets = {
+    scripts: [],
+    videos: []
+  };
+  
+  // Load saved assets from localStorage
+  function loadAssets() {
+    const saved = localStorage.getItem('facelessAssets');
+    if (saved) {
+      assets = JSON.parse(saved);
+    }
+    updateAssetStats();
+  }
+  
+  // Save assets to localStorage
+  function saveAssets() {
+    localStorage.setItem('facelessAssets', JSON.stringify(assets));
+    updateAssetStats();
+  }
+  
+  // Update the asset counter display
+  function updateAssetStats() {
+    document.getElementById('scriptCount').innerText = assets.scripts.length;
+    document.getElementById('videoCount').innerText = assets.videos.length;
+  }
+  
+  // Save a generated script
+  function saveScript(scriptText, topic) {
+    const newScript = {
+      id: Date.now(),
+      topic: topic,
+      content: scriptText,
+      date: new Date().toLocaleDateString()
+    };
+    assets.scripts.unshift(newScript);
+    saveAssets();
+    return newScript;
+  }
+  
+  // Display asset library
+  function displayAssets() {
+    const outputDiv = document.getElementById('assetOutput');
+    if (assets.scripts.length === 0 && assets.videos.length === 0) {
+      outputDiv.innerHTML = '<p style="color: var(--muted);">No assets yet. Generate your first script to get started!</p>';
+      outputDiv.style.display = 'block';
+      return;
+    }
+    
+    let html = '<div style="font-size: 0.8rem;">';
+    if (assets.scripts.length > 0) {
+      html += '<strong style="color: var(--accent);">📝 Recent Scripts:</strong><ul style="margin: 0.5rem 0 1rem 1rem;">';
+      assets.scripts.slice(0, 5).forEach(script => {
+        html += `<li><strong>${script.topic}</strong><br><span style="color: var(--muted); font-size: 0.7rem;">${script.date}</span><br>${script.content.substring(0, 100)}...</li>`;
+      });
+      html += '</ul>';
+    }
+    html += '</div>';
+    outputDiv.innerHTML = html;
+    outputDiv.style.display = 'block';
+  }
+  
+  // Generate AI Script (simulated - in production, this would call an API)
+  function generateScript() {
+    const topic = document.getElementById('scriptTopic').value.trim();
+    const style = document.getElementById('scriptStyle').value;
+    const outputDiv = document.getElementById('scriptOutput');
+    
+    if (!topic) {
+      alert('Please enter a topic for your video');
+      return;
+    }
+    
+    // Show loading state
+    outputDiv.innerHTML = '<p style="color: var(--accent);">✍️ Generating your script...</p>';
+    outputDiv.style.display = 'block';
+    
+    // Simulate AI generation (in production, replace with actual API call)
+    setTimeout(() => {
+      const scripts = {
+        educational: `🔥 ${topic} changed everything. Here's why.
+
+Did you know that mastering ${topic} can save you hours every week? Most people get this wrong, but the truth is simpler than you think.
+
+First, start with the basics. Understand the core principles before moving forward.
+
+Second, practice consistently. Even 10 minutes a day makes a massive difference.
+
+Third, track your progress. What gets measured gets improved.
+
+The key takeaway? ${topic} isn't about talent—it's about system.
+
+Follow for more tips to level up your skills! 🚀`,
+        
+        storytelling: `💭 It was a moment that changed everything.
+
+I never expected that ${topic} would completely transform how I see the world. But looking back, the signs were there all along.
+
+They say success leaves clues. And in this story, every clue led to one undeniable truth.
+
+What happened next surprised everyone. But for me, it was the beginning of something extraordinary.
+
+Want to hear the full story? Follow along for more insights.`,
+        
+        list: `🎯 3 ${topic} secrets they don't want you to know.
+
+Number one: Start before you're ready. Waiting for perfect timing is the biggest mistake.
+
+Number two: Focus on consistency, not intensity. Small daily actions beat massive effort once a week.
+
+Number three: Learn from others, but build your own system. Copying never creates breakthrough results.
+
+Master these three principles, and ${topic} becomes almost automatic.
+
+Which one will you start with today? Follow for more!`,
+        
+        motivational: `⚡ Stop waiting for the perfect moment.
+
+The truth about ${topic}? The only thing standing between you and success is the story you keep telling yourself.
+
+Every expert was once a beginner. Every master started as a student. The difference? They started.
+
+You have everything you need right now. Not tomorrow. Not next week. Today.
+
+Take one step. Just one. That's how mountains are climbed.
+
+Your future self is watching. Make them proud.
+
+Follow for daily motivation.`
+      };
+      
+      const script = scripts[style] || scripts.educational;
+      const generatedScript = script;
+      
+      outputDiv.innerHTML = `
+        <div style="margin-bottom: 0.75rem;">
+          <strong style="color: var(--accent);">🎬 Generated Script:</strong>
+        </div>
+        <div style="white-space: pre-line; margin-bottom: 1rem;">${generatedScript}</div>
+        <button id="saveScriptBtn" style="width: auto; margin-top: 0.5rem;">💾 Save to Asset Library</button>
+      `;
+      
+      // Add save functionality to the new button
+      setTimeout(() => {
+        const saveBtn = document.getElementById('saveScriptBtn');
+        if (saveBtn) {
+          saveBtn.onclick = () => {
+            saveScript(generatedScript, topic);
+            alert(`Script "${topic}" saved to your asset library!`);
+          };
+        }
+      }, 0);
+      
+    }, 800);
+  }
+  
+  // Generate 7 topics for content calendar
+  function generateTopics() {
+    const outputDiv = document.getElementById('calendarOutput');
+    
+    outputDiv.innerHTML = '<p style="color: var(--accent);">📅 Generating your weekly content calendar...</p>';
+    outputDiv.style.display = 'block';
+    
+    setTimeout(() => {
+      const topics = [
+        "5 ${topic} mistakes you're making right now",
+        "The ${topic} secret nobody talks about",
+        "How to master ${topic} in 30 days",
+        "${topic} vs ${topic} alternatives: which is better?",
+        "The surprising truth about ${topic}",
+        "3 ${topic} hacks that actually work",
+        "Why ${topic} is changing everything"
+      ];
+      
+      const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+      let html = '<div style="margin-bottom: 0.75rem;"><strong style="color: var(--accent);">📅 Your 7-Day Content Calendar:</strong></div>';
+      html += '<div style="display: flex; flex-direction: column; gap: 0.5rem;">';
+      
+      topics.forEach((topic, index) => {
+        const day = days[index];
+        html += `
+          <div class="topic-item" onclick="document.getElementById('scriptTopic').value='${topic.replace('${topic}', 'your niche')}'; document.getElementById('scriptTopic').scrollIntoView({behavior: 'smooth'});">
+            <div class="topic-title"><strong>${day}:</strong> ${topic.replace('${topic}', 'your niche')}</div>
+            <div class="topic-date">Click to use this topic →</div>
+          </div>
+        `;
+      });
+      
+      html += '</div>';
+      html += '<p style="margin-top: 0.75rem; font-size: 0.7rem; color: var(--muted);">💡 Click any topic above to auto-fill the script generator!</p>';
+      
+      outputDiv.innerHTML = html;
+      
+      // Save to localStorage as weekly calendar
+      const calendar = {
+        generated: new Date().toLocaleDateString(),
+        topics: topics.map(t => t.replace('${topic}', 'your niche'))
+      };
+      localStorage.setItem('weeklyCalendar', JSON.stringify(calendar));
+      
+    }, 500);
+  }
+  
+  // View saved calendar
+  function loadSavedCalendar() {
+    const saved = localStorage.getItem('weeklyCalendar');
+    if (saved) {
+      const calendar = JSON.parse(saved);
+      const outputDiv = document.getElementById('calendarOutput');
+      let html = '<div style="margin-bottom: 0.75rem;"><strong style="color: var(--accent);">📅 Saved Calendar (from ' + calendar.generated + '):</strong></div>';
+      html += '<div style="display: flex; flex-direction: column; gap: 0.5rem;">';
+      calendar.topics.forEach((topic, index) => {
+        html += `<div class="topic-item">${index + 1}. ${topic}</div>`;
+      });
+      html += '</div>';
+      outputDiv.innerHTML = html;
+      outputDiv.style.display = 'block';
+    }
+  }
+  
+  // Initialize event listeners
+  document.addEventListener('DOMContentLoaded', () => {
+    loadAssets();
+    
+    // Set up button listeners
+    const generateBtn = document.getElementById('generateScriptBtn');
+    if (generateBtn) generateBtn.addEventListener('click', generateScript);
+    
+    const viewAssetsBtn = document.getElementById('viewAssetsBtn');
+    if (viewAssetsBtn) viewAssetsBtn.addEventListener('click', displayAssets);
+    
+    const generateTopicsBtn = document.getElementById('generateTopicsBtn');
+    if (generateTopicsBtn) generateTopicsBtn.addEventListener('click', generateTopics);
+    
+    // Load saved calendar if exists
+    loadSavedCalendar();
+  });
+</script>
 
 </body>
 </html>
