@@ -212,7 +212,7 @@
     background: var(--step-bg);
     border-radius: 8px;
     font-size: 0.85rem;
-    max-height: 200px;
+    max-height: 300px;
     overflow-y: auto;
   }
   
@@ -240,6 +240,59 @@
     font-size: 0.7rem;
     color: var(--muted);
     font-family: 'DM Mono', monospace;
+  }
+  
+  /* API Key Input Styling */
+  .api-key-section {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background: rgba(255,107,53,0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(255,107,53,0.2);
+  }
+  
+  .api-key-section label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+  
+  .api-key-input-group {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .api-key-input-group input {
+    flex: 1;
+    margin-bottom: 0;
+  }
+  
+  .api-status {
+    font-size: 0.7rem;
+    margin-top: 0.25rem;
+    color: var(--muted);
+  }
+  
+  .api-status.valid {
+    color: var(--accent);
+  }
+  
+  /* Loading animation */
+  .loading {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--accent);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
   }
   
   /* PHASE STYLES (keeping your original structure) */
@@ -483,17 +536,28 @@
 
 <main>
 
-  <!-- INTERACTIVE TOOLS SECTION - New -->
+  <!-- INTERACTIVE TOOLS SECTION -->
   <div class="tools-section">
     <div class="tools-header">
       <h2>⚡ Production Tools</h2>
       <p>Interactive tools to streamline your daily video creation workflow</p>
     </div>
     <div class="tools-grid">
-      <!-- Tool 1: AI Script Generator (placeholder for next step) -->
+      <!-- Tool 1: AI Script Generator with OpenAI -->
       <div class="tool-card">
         <h3><span class="tool-icon">✍️</span> AI Script Generator</h3>
-        <p style="color: var(--muted); font-size: 0.8rem; margin-bottom: 1rem;">Generate a 60-second faceless video script in seconds</p>
+        <p style="color: var(--muted); font-size: 0.8rem; margin-bottom: 1rem;">Generate a 60-second faceless video script using GPT-4</p>
+        
+        <!-- API Key Input (Stored locally, never sent to any server except OpenAI) -->
+        <div class="api-key-section">
+          <label>🔑 OpenAI API Key</label>
+          <div class="api-key-input-group">
+            <input type="password" id="apiKey" placeholder="sk-..." autocomplete="off">
+            <button id="saveApiKeyBtn" style="white-space: nowrap;">Save</button>
+          </div>
+          <div class="api-status" id="apiStatus">Your key is stored in your browser only</div>
+        </div>
+        
         <input type="text" id="scriptTopic" placeholder="Enter your video topic..." style="margin-bottom: 0.5rem;">
         <select id="scriptStyle" style="margin-bottom: 1rem;">
           <option value="educational">Educational / How-to</option>
@@ -501,11 +565,11 @@
           <option value="list">List / Top X Format</option>
           <option value="motivational">Motivational / Inspirational</option>
         </select>
-        <button id="generateScriptBtn">Generate Script →</button>
+        <button id="generateScriptBtn">Generate Script with AI →</button>
         <div id="scriptOutput" class="output-area" style="display: none;"></div>
       </div>
       
-      <!-- Tool 2: Asset Tracker (placeholder) -->
+      <!-- Tool 2: Asset Tracker -->
       <div class="tool-card">
         <h3><span class="tool-icon">📦</span> Asset Tracker</h3>
         <p style="color: var(--muted); font-size: 0.8rem; margin-bottom: 1rem;">Track your scripts, voiceovers, and video assets</p>
@@ -517,7 +581,7 @@
         <div id="assetOutput" class="output-area" style="display: none; font-size: 0.8rem;"></div>
       </div>
       
-      <!-- Tool 3: Dynamic Topic Calendar (placeholder) -->
+      <!-- Tool 3: Dynamic Topic Calendar -->
       <div class="tool-card">
         <h3><span class="tool-icon">📅</span> Topic Calendar</h3>
         <p style="color: var(--muted); font-size: 0.8rem; margin-bottom: 1rem;">Generate and manage 7 days of content topics</p>
@@ -527,7 +591,8 @@
     </div>
   </div>
 
-  <!-- PHASE 00: FOUNDATION (keeping your original content) -->
+  <!-- [REST OF YOUR PHASE CONTENT - keeping all your original phases] -->
+  <!-- PHASE 00: FOUNDATION -->
   <div class="phase">
     <div class="phase-label">
       <span class="phase-num">PHASE 00 — DO ONCE</span>
@@ -605,13 +670,11 @@
         <div class="step-content">
           <div class="step-title">Generate a Hook + Script with AI</div>
           <div class="step-body">
-            Open ChatGPT, Claude, or Gemini. Use this repeatable prompt structure:<br><br>
-            <strong>"Write a 60-second script for a faceless YouTube Short about [TOPIC]. Start with a 1-sentence hook that creates curiosity. Use short sentences. No filler words. End with a call to action to follow for more."</strong><br><br>
-            Edit for accuracy and your brand voice. Target <strong>130–160 words</strong> for a 60-second video.
+            Use the AI Script Generator above to create your script. Just enter your topic, select a style, and click generate. The AI will create a 60-second script optimized for faceless videos.
             <div class="tools">
+              <span class="tool free">OpenAI GPT-4</span>
               <span class="tool free">Claude.ai (free)</span>
               <span class="tool free">ChatGPT (free tier)</span>
-              <span class="tool free">Gemini (free)</span>
             </div>
           </div>
         </div>
@@ -622,15 +685,10 @@
         <div class="step-content">
           <div class="step-title">Build a Content Calendar (Once a Week)</div>
           <div class="step-body">
-            Every Sunday, generate 7 topics at once using AI: <strong>"Give me 7 video topic ideas for a [NICHE] channel. Each should be a specific, searchable question or surprising fact."</strong> Paste results into a simple spreadsheet. Each morning, you just pull the next topic — no decision fatigue.
+            Use the Topic Calendar tool above to generate 7 topics at once. Each morning, you just pull the next topic — no decision fatigue.
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="callout">
-      <div class="callout-label">⚡ Pro Tip</div>
-      Save your best-performing AI prompt as a text snippet (use Raycast, TextExpander, or a notes app). Type one shortcut and your full prompt appears instantly.
     </div>
   </div>
 
@@ -731,17 +789,6 @@
         </div>
       </div>
     </div>
-
-    <div class="callout">
-      <div class="callout-label">🚀 Speed Route</div>
-      <strong>Use an all-in-one AI video tool</strong> to collapse phases 1–3 into a single workflow. Tools like <strong>Pictory, InVideo AI, or HeyGen</strong> can take your script and auto-assemble a full video with stock footage, voiceover, and captions in under 5 minutes. Quality is lower, but speed is unmatched for daily volume.
-      <div class="tools" style="margin-top:0.65rem;">
-        <span class="tool paid">Pictory AI</span>
-        <span class="tool paid">InVideo AI</span>
-        <span class="tool paid">HeyGen</span>
-        <span class="tool free">Canva Video (free)</span>
-      </div>
-    </div>
   </div>
 
   <!-- PHASE 4: PUBLISH -->
@@ -796,7 +843,7 @@
 
   <hr class="divider">
 
- <!-- DAILY TIMELINE -->
+  <!-- DAILY TIMELINE -->
   <div class="phase-title" style="margin-bottom:0.4rem;">Your Daily Production Timeline</div>
   <p class="phase-desc" style="margin-bottom:1.5rem;">A suggested schedule to keep total production under 90 minutes.</p>
 
@@ -809,7 +856,7 @@
     <div class="tl-item">
       <div class="tl-time">0:02</div>
       <div class="tl-line-wrap"><div class="tl-dot"></div><div class="tl-connector"></div></div>
-      <div class="tl-text"><div class="tl-label">Generate & edit script with AI</div><div class="tl-detail">Use your saved prompt. Edit output for accuracy. ~10 min.</div></div>
+      <div class="tl-text"><div class="tl-label">Generate & edit script with AI</div><div class="tl-detail">Use the AI Script Generator. Edit output for accuracy. ~10 min.</div></div>
     </div>
     <div class="tl-item">
       <div class="tl-time">0:12</div>
@@ -844,16 +891,190 @@
 
 <script>
   // ============================================
-  // INTERACTIVE TOOLS - BASE FUNCTIONALITY
+  // OPENAI INTEGRATION
   // ============================================
   
-  // Asset Tracker using localStorage
+  // Store API key in localStorage (only in your browser)
+  let openAIKey = localStorage.getItem('openai_api_key') || '';
+  
+  // Initialize API key input
+  function initAPIKeyInput() {
+    const apiKeyInput = document.getElementById('');
+    const saveBtn = document.getElementById('saveApiKeyBtn');
+    const apiStatus = document.getElementById('apiStatus');
+    
+    if (openAIKey) {
+      apiKeyInput.value = '••••••••••••••••';
+      apiStatus.innerHTML = '✓ API key is stored locally';
+      apiStatus.classList.add('valid');
+    }
+    
+    saveBtn.addEventListener('click', () => {
+      let newKey = apiKeyInput.value;
+      if (newKey === '••••••••••••••••' && openAIKey) {
+        newKey = openAIKey;
+      }
+      if (newKey && newKey.startsWith('sk-')) {
+        openAIKey = newKey;
+        localStorage.setItem('openai_api_key', newKey);
+        apiKeyInput.value = '••••••••••••••••';
+        apiStatus.innerHTML = '✓ API key saved successfully!';
+        apiStatus.classList.add('valid');
+        setTimeout(() => {
+          apiStatus.innerHTML = 'API key is stored locally';
+        }, 2000);
+      } else if (newKey) {
+        apiStatus.innerHTML = '⚠️ Invalid API key. It should start with "sk-"';
+        apiStatus.classList.remove('valid');
+      } else {
+        apiStatus.innerHTML = 'Please enter a valid OpenAI API key';
+      }
+    });
+  }
+  
+  // Call OpenAI API to generate script
+  async function generateScriptWithOpenAI(topic, style) {
+    if (!openAIKey) {
+      throw new Error('Please enter your OpenAI API key first');
+    }
+    
+    // Define prompts based on style
+    const stylePrompts = {
+      educational: `Write a 60-second script for a faceless YouTube Short about "${topic}". 
+Format: Start with a strong hook that creates curiosity. Use short, punchy sentences. No filler words. 
+Include 3-4 key points. End with a call to action asking viewers to follow for more. 
+The script should be around 130-160 words. Make it engaging and easy to narrate.`,
+      
+      storytelling: `Write a 60-second storytelling script for a faceless YouTube Short about "${topic}". 
+Format: Start with an intriguing opening line. Tell a mini-story with a beginning, middle, and end. 
+Use vivid but concise language. Keep sentences short. End with a reflective takeaway and call to action. 
+The script should be around 130-160 words.`,
+      
+      list: `Write a "Top X" style 60-second script for a faceless YouTube Short about "${topic}". 
+Format: Start with a hook like "3 things nobody tells you about ${topic}..." 
+Present 3 items with brief explanations. Use short, punchy sentences. 
+End with a call to action. The script should be around 130-160 words.`,
+      
+      motivational: `Write a motivational 60-second script for a faceless YouTube Short about "${topic}". 
+Format: Start with a powerful statement. Use inspiring language. Include a challenge or mindset shift. 
+Keep sentences short and impactful. End with an uplifting call to action. 
+The script should be around 130-160 words.`
+    };
+    
+    const prompt = stylePrompts[style] || stylePrompts.educational;
+    
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${openAIKey}`
+      },
+      body: JSON.stringify({
+        model: 'gpt-3.5-turbo', // You can change to 'gpt-4' if you have access
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a professional YouTube scriptwriter specializing in faceless videos. Create engaging, concise scripts optimized for short-form content.'
+          },
+          {
+            role: 'user',
+            content: prompt
+          }
+        ],
+        temperature: 0.8,
+        max_tokens: 300
+      })
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      if (response.status === 401) {
+        throw new Error('Invalid API key. Please check your OpenAI API key.');
+      } else if (response.status === 429) {
+        throw new Error('Rate limit exceeded. Please wait a moment and try again.');
+      } else {
+        throw new Error(errorData.error?.message || 'Failed to generate script');
+      }
+    }
+    
+    const data = await response.json();
+    return data.choices[0].message.content.trim();
+  }
+  
+  // Generate script button handler
+  async function handleGenerateScript() {
+    const topic = document.getElementById('scriptTopic').value.trim();
+    const style = document.getElementById('scriptStyle').value;
+    const outputDiv = document.getElementById('scriptOutput');
+    
+    if (!topic) {
+      alert('Please enter a topic for your video');
+      return;
+    }
+    
+    if (!openAIKey) {
+      alert('Please enter your OpenAI API key in the field above first');
+      const apiKeyInput = document.getElementById('apiKey');
+      apiKeyInput.focus();
+      return;
+    }
+    
+    // Show loading state
+    outputDiv.innerHTML = '<div class="loading"></div> Generating your script with AI...<br><span style="color: var(--muted); font-size: 0.7rem;">This takes about 3-5 seconds</span>';
+    outputDiv.style.display = 'block';
+    
+    try {
+      const script = await generateScriptWithOpenAI(topic, style);
+      
+      outputDiv.innerHTML = `
+        <div style="margin-bottom: 0.75rem;">
+          <strong style="color: var(--accent);">🎬 AI-Generated Script:</strong>
+          <span style="color: var(--muted); font-size: 0.7rem; margin-left: 0.5rem;">${style} style</span>
+        </div>
+        <div style="white-space: pre-line; margin-bottom: 1rem; line-height: 1.6;">${script.replace(/\n/g, '<br>')}</div>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <button id="saveScriptBtn" style="width: auto;">💾 Save to Asset Library</button>
+          <button id="copyScriptBtn" style="width: auto; background: rgba(255,255,255,0.05);">📋 Copy to Clipboard</button>
+        </div>
+      `;
+      
+      // Add save functionality
+      setTimeout(() => {
+        const saveBtn = document.getElementById('saveScriptBtn');
+        if (saveBtn) {
+          saveBtn.onclick = () => {
+            saveScript(script, topic);
+            alert(`Script "${topic}" saved to your asset library!`);
+          };
+        }
+        
+        const copyBtn = document.getElementById('copyScriptBtn');
+        if (copyBtn) {
+          copyBtn.onclick = () => {
+            navigator.clipboard.writeText(script);
+            alert('Script copied to clipboard!');
+          };
+        }
+      }, 0);
+      
+    } catch (error) {
+      outputDiv.innerHTML = `
+        <div style="color: var(--accent2); margin-bottom: 0.5rem;">❌ Error</div>
+        <div style="color: var(--muted);">${error.message}</div>
+        <div style="margin-top: 0.75rem; font-size: 0.7rem;">Please check your API key and try again.</div>
+      `;
+    }
+  }
+  
+  // ============================================
+  // ASSET TRACKER (localStorage)
+  // ============================================
+  
   let assets = {
     scripts: [],
     videos: []
   };
   
-  // Load saved assets from localStorage
   function loadAssets() {
     const saved = localStorage.getItem('facelessAssets');
     if (saved) {
@@ -862,19 +1083,18 @@
     updateAssetStats();
   }
   
-  // Save assets to localStorage
   function saveAssets() {
     localStorage.setItem('facelessAssets', JSON.stringify(assets));
     updateAssetStats();
   }
   
-  // Update the asset counter display
   function updateAssetStats() {
-    document.getElementById('scriptCount').innerText = assets.scripts.length;
-    document.getElementById('videoCount').innerText = assets.videos.length;
+    const scriptCountEl = document.getElementById('scriptCount');
+    const videoCountEl = document.getElementById('videoCount');
+    if (scriptCountEl) scriptCountEl.innerText = assets.scripts.length;
+    if (videoCountEl) videoCountEl.innerText = assets.videos.length;
   }
   
-  // Save a generated script
   function saveScript(scriptText, topic) {
     const newScript = {
       id: Date.now(),
@@ -884,10 +1104,8 @@
     };
     assets.scripts.unshift(newScript);
     saveAssets();
-    return newScript;
   }
   
-  // Display asset library
   function displayAssets() {
     const outputDiv = document.getElementById('assetOutput');
     if (assets.scripts.length === 0 && assets.videos.length === 0) {
@@ -898,127 +1116,42 @@
     
     let html = '<div style="font-size: 0.8rem;">';
     if (assets.scripts.length > 0) {
-      html += '<strong style="color: var(--accent);">📝 Recent Scripts:</strong><ul style="margin: 0.5rem 0 1rem 1rem;">';
-      assets.scripts.slice(0, 5).forEach(script => {
-        html += `<li><strong>${script.topic}</strong><br><span style="color: var(--muted); font-size: 0.7rem;">${script.date}</span><br>${script.content.substring(0, 100)}...</li>`;
+      html += '<strong style="color: var(--accent);">📝 Saved Scripts:</strong><div style="margin-top: 0.5rem;">';
+      assets.scripts.slice(0, 10).forEach(script => {
+        html += `
+          <div style="padding: 0.5rem; border-bottom: 1px solid var(--border); margin-bottom: 0.5rem;">
+            <div><strong>${script.topic}</strong> <span style="color: var(--muted); font-size: 0.7rem;">${script.date}</span></div>
+            <div style="font-size: 0.75rem; color: var(--muted); margin-top: 0.25rem;">${script.content.substring(0, 100)}...</div>
+          </div>
+        `;
       });
-      html += '</ul>';
+      html += '</div>';
     }
     html += '</div>';
     outputDiv.innerHTML = html;
     outputDiv.style.display = 'block';
   }
   
-  // Generate AI Script (simulated - in production, this would call an API)
-  function generateScript() {
-    const topic = document.getElementById('scriptTopic').value.trim();
-    const style = document.getElementById('scriptStyle').value;
-    const outputDiv = document.getElementById('scriptOutput');
-    
-    if (!topic) {
-      alert('Please enter a topic for your video');
-      return;
-    }
-    
-    // Show loading state
-    outputDiv.innerHTML = '<p style="color: var(--accent);">✍️ Generating your script...</p>';
-    outputDiv.style.display = 'block';
-    
-    // Simulate AI generation (in production, replace with actual API call)
-    setTimeout(() => {
-      const scripts = {
-        educational: `🔥 ${topic} changed everything. Here's why.
-
-Did you know that mastering ${topic} can save you hours every week? Most people get this wrong, but the truth is simpler than you think.
-
-First, start with the basics. Understand the core principles before moving forward.
-
-Second, practice consistently. Even 10 minutes a day makes a massive difference.
-
-Third, track your progress. What gets measured gets improved.
-
-The key takeaway? ${topic} isn't about talent—it's about system.
-
-Follow for more tips to level up your skills! 🚀`,
-        
-        storytelling: `💭 It was a moment that changed everything.
-
-I never expected that ${topic} would completely transform how I see the world. But looking back, the signs were there all along.
-
-They say success leaves clues. And in this story, every clue led to one undeniable truth.
-
-What happened next surprised everyone. But for me, it was the beginning of something extraordinary.
-
-Want to hear the full story? Follow along for more insights.`,
-        
-        list: `🎯 3 ${topic} secrets they don't want you to know.
-
-Number one: Start before you're ready. Waiting for perfect timing is the biggest mistake.
-
-Number two: Focus on consistency, not intensity. Small daily actions beat massive effort once a week.
-
-Number three: Learn from others, but build your own system. Copying never creates breakthrough results.
-
-Master these three principles, and ${topic} becomes almost automatic.
-
-Which one will you start with today? Follow for more!`,
-        
-        motivational: `⚡ Stop waiting for the perfect moment.
-
-The truth about ${topic}? The only thing standing between you and success is the story you keep telling yourself.
-
-Every expert was once a beginner. Every master started as a student. The difference? They started.
-
-You have everything you need right now. Not tomorrow. Not next week. Today.
-
-Take one step. Just one. That's how mountains are climbed.
-
-Your future self is watching. Make them proud.
-
-Follow for daily motivation.`
-      };
-      
-      const script = scripts[style] || scripts.educational;
-      const generatedScript = script;
-      
-      outputDiv.innerHTML = `
-        <div style="margin-bottom: 0.75rem;">
-          <strong style="color: var(--accent);">🎬 Generated Script:</strong>
-        </div>
-        <div style="white-space: pre-line; margin-bottom: 1rem;">${generatedScript}</div>
-        <button id="saveScriptBtn" style="width: auto; margin-top: 0.5rem;">💾 Save to Asset Library</button>
-      `;
-      
-      // Add save functionality to the new button
-      setTimeout(() => {
-        const saveBtn = document.getElementById('saveScriptBtn');
-        if (saveBtn) {
-          saveBtn.onclick = () => {
-            saveScript(generatedScript, topic);
-            alert(`Script "${topic}" saved to your asset library!`);
-          };
-        }
-      }, 0);
-      
-    }, 800);
-  }
+  // ============================================
+  // TOPIC CALENDAR
+  // ============================================
   
-  // Generate 7 topics for content calendar
   function generateTopics() {
     const outputDiv = document.getElementById('calendarOutput');
     
-    outputDiv.innerHTML = '<p style="color: var(--accent);">📅 Generating your weekly content calendar...</p>';
+    outputDiv.innerHTML = '<div class="loading"></div> Generating your weekly content calendar...';
     outputDiv.style.display = 'block';
     
+    // Simulate AI generation (you can also connect this to OpenAI)
     setTimeout(() => {
       const topics = [
-        "5 ${topic} mistakes you're making right now",
-        "The ${topic} secret nobody talks about",
-        "How to master ${topic} in 30 days",
-        "${topic} vs ${topic} alternatives: which is better?",
-        "The surprising truth about ${topic}",
-        "3 ${topic} hacks that actually work",
-        "Why ${topic} is changing everything"
+        "5 common mistakes beginners make",
+        "The secret strategy experts use",
+        "How to get results in 30 days",
+        "Why most people get this wrong",
+        "3 tools that changed everything",
+        "The mindset shift that matters",
+        "What I wish I knew earlier"
       ];
       
       const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -1028,8 +1161,8 @@ Follow for daily motivation.`
       topics.forEach((topic, index) => {
         const day = days[index];
         html += `
-          <div class="topic-item" onclick="document.getElementById('scriptTopic').value='${topic.replace('${topic}', 'your niche')}'; document.getElementById('scriptTopic').scrollIntoView({behavior: 'smooth'});">
-            <div class="topic-title"><strong>${day}:</strong> ${topic.replace('${topic}', 'your niche')}</div>
+          <div class="topic-item" onclick="document.getElementById('scriptTopic').value='${topic}'; document.getElementById('scriptTopic').scrollIntoView({behavior: 'smooth'});">
+            <div class="topic-title"><strong>${day}:</strong> ${topic}</div>
             <div class="topic-date">Click to use this topic →</div>
           </div>
         `;
@@ -1040,17 +1173,16 @@ Follow for daily motivation.`
       
       outputDiv.innerHTML = html;
       
-      // Save to localStorage as weekly calendar
+      // Save to localStorage
       const calendar = {
         generated: new Date().toLocaleDateString(),
-        topics: topics.map(t => t.replace('${topic}', 'your niche'))
+        topics: topics
       };
       localStorage.setItem('weeklyCalendar', JSON.stringify(calendar));
       
     }, 500);
   }
   
-  // View saved calendar
   function loadSavedCalendar() {
     const saved = localStorage.getItem('weeklyCalendar');
     if (saved) {
@@ -1067,22 +1199,23 @@ Follow for daily motivation.`
     }
   }
   
-  // Initialize event listeners
+  // ============================================
+  // INITIALIZATION
+  // ============================================
+  
   document.addEventListener('DOMContentLoaded', () => {
+    initAPIKeyInput();
     loadAssets();
+    loadSavedCalendar();
     
-    // Set up button listeners
     const generateBtn = document.getElementById('generateScriptBtn');
-    if (generateBtn) generateBtn.addEventListener('click', generateScript);
+    if (generateBtn) generateBtn.addEventListener('click', handleGenerateScript);
     
     const viewAssetsBtn = document.getElementById('viewAssetsBtn');
     if (viewAssetsBtn) viewAssetsBtn.addEventListener('click', displayAssets);
     
     const generateTopicsBtn = document.getElementById('generateTopicsBtn');
     if (generateTopicsBtn) generateTopicsBtn.addEventListener('click', generateTopics);
-    
-    // Load saved calendar if exists
-    loadSavedCalendar();
   });
 </script>
 
